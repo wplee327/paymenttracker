@@ -92,18 +92,36 @@ public class Database {
 
 	public int getID(String lastName, String firstName) {
 		Statement sqlStatement = null;
-		ResultSet result = null;
+		int idNum = -1;
 		try {
 			sqlStatement = dbConnection.createStatement();
 			String sqlString = "SELECT ID FROM CLIENTS WHERE LASTNAME = '" + lastName + "' AND FIRSTNAME = '"
 					+ firstName + "'";
-			result = sqlStatement.executeQuery(sqlString);
+			ResultSet result = sqlStatement.executeQuery(sqlString);
 			sqlStatement.close();
-			return result.getInt("ID");
+			idNum = result.getInt("ID");
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		return 0;
+		return idNum;
+	}
+
+	public int[] getPayments(int clientID, String date) {
+		Statement sqlStatement = null;
+		int[] paymentsArray = new int[3];
+		try {
+			sqlStatement = dbConnection.createStatement();
+			String sqlString = "SELECT UNPAID, PENDING, PAID FROM PAYMENTS WHERE CLIENTID = "
+					+ Integer.toString(clientID) + " AND DATE = " + date;
+			ResultSet result = sqlStatement.executeQuery(sqlString);
+			sqlStatement.close();
+			for (int idx = 0; idx < 3; idx++) {
+				paymentsArray[idx] = result.getInt(idx + 1);
+			}
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		return paymentsArray;
 	}
 
 	public void initDatabase() {
@@ -114,7 +132,7 @@ public class Database {
 					+ "FIRSTNAME TEXT NOT NULL)";
 			sqlStatement.executeUpdate(sqlString);
 			sqlString = "CREATE TABLE PAYMENTS " + "(ID INT PRIMARY KEY NOT NULL, " + "CLIENTID INT NOT NULL, "
-					+ "MONTH INT NOT NULL, " + "UNPAID INT NOT NULL, " + "PENDING INT NOT NULL, "
+					+ "DATE TEXT NOT NULL, " + "UNPAID INT NOT NULL, " + "PENDING INT NOT NULL, "
 					+ "PAID INT NOT NULL)";
 			sqlStatement.executeUpdate(sqlString);
 			sqlStatement.close();
