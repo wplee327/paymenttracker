@@ -1,11 +1,10 @@
 package application;
-	
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-
 
 public class Main extends Application {
 	@Override
@@ -17,11 +16,11 @@ public class Main extends Application {
 			primaryStage.setMinWidth(1047);
 			primaryStage.setMinHeight(553);
 			primaryStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
