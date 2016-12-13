@@ -4,14 +4,18 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -20,6 +24,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -65,6 +71,8 @@ public class FXMLController implements Initializable {
 	private ObservableList<Node> calendarButtons;
 	private List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July",
 			"August", "September", "October", "November", "December");
+	private List<String> statuses = Arrays.asList("Unpaid", "Pending", "Paid");
+	private Database trackerDatabase = new Database("paymenttracker.db");
 
 	public FXMLController() {
 
@@ -89,7 +97,56 @@ public class FXMLController implements Initializable {
 		addclientButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				Dialog<Pair<String, String>> addclientDialog = new Dialog<>();
+				addclientDialog.setTitle("Add Client");
+				addclientDialog.setHeaderText("Add a client");
+				addclientDialog.setGraphic(new ImageView(
+						FXMLController.class.getClassLoader().getResource("res/1481607218_user.png").toString()));
 
+				ButtonType addButtonType = new ButtonType("Add", ButtonData.OK_DONE);
+				addclientDialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
+
+				GridPane dialogGridPane = new GridPane();
+				dialogGridPane.setHgap(10);
+				dialogGridPane.setVgap(10);
+				dialogGridPane.setPadding(new Insets(20, 150, 10, 10));
+
+				TextField lastTextField = new TextField();
+				lastTextField.setPromptText("Last Name");
+				TextField firstTextField = new TextField();
+				firstTextField.setPromptText("First Name");
+
+				dialogGridPane.add(new Label("Last Name:"), 0, 0);
+				dialogGridPane.add(lastTextField, 1, 0);
+				dialogGridPane.add(new Label("First Name:"), 0, 1);
+				dialogGridPane.add(firstTextField, 1, 1);
+
+				Node addButton = addclientDialog.getDialogPane().lookupButton(addButtonType);
+				addButton.setDisable(true);
+
+				BooleanBinding lastBinding = Bindings.createBooleanBinding(() -> {
+					return lastTextField.getText().trim().isEmpty();
+				}, lastTextField.textProperty());
+				BooleanBinding firstBinding = Bindings.createBooleanBinding(() -> {
+					return firstTextField.getText().trim().isEmpty();
+				}, firstTextField.textProperty());
+
+				addButton.disableProperty().bind(lastBinding.or(firstBinding));
+
+				addclientDialog.getDialogPane().setContent(dialogGridPane);
+
+				Platform.runLater(() -> lastTextField.requestFocus());
+
+				addclientDialog.setResultConverter(dialogButton -> {
+					if (dialogButton == addButtonType) {
+						return new Pair<>(lastTextField.getText(), firstTextField.getText());
+					}
+					return null;
+				});
+
+				Optional<Pair<String, String>> result = addclientDialog.showAndWait();
+
+				trackerDatabase.addClient(result.get().getKey(), result.get().getValue());
 			}
 		});
 		removeclientButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -200,6 +257,10 @@ public class FXMLController implements Initializable {
 		}
 		monthLabel.setText(months.get(month));
 		yearLabel.setText(Integer.toString(year));
+	}
+
+	public void populateTableView() {
+
 	}
 
 	public void changePaymentStatus(int status) {

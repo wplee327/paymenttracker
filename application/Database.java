@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Database {
-	Connection dbConnection = null;
+	private Connection dbConnection = null;
 
 	public Database(String dbName) {
 		if (existsDatabase(dbName)) {
@@ -28,32 +28,24 @@ public class Database {
 		}
 	}
 
-	public boolean openConnection(String dbName) {
+	public void openConnection(String dbName) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			dbConnection = DriverManager.getConnection("jdbc:sqlite:" + dbName);
-			if (dbConnection.isValid(10)) {
-				return true;
-			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		return false;
 	}
 
-	public boolean closeConnection() {
+	public void closeConnection() {
 		try {
 			dbConnection.close();
-			if (dbConnection.isClosed()) {
-				return true;
-			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		return false;
 	}
 
-	public boolean addClient(String lastName, String firstName) {
+	public void addClient(String lastName, String firstName) {
 		Statement sqlStatement = null;
 		int result = Statement.EXECUTE_FAILED;
 		try {
@@ -65,13 +57,9 @@ public class Database {
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		if (result == Statement.EXECUTE_FAILED) {
-			return false;
-		}
-		return true;
 	}
 
-	public boolean removeClient(int idNum) {
+	public void removeClient(int idNum) {
 		Statement sqlStatement = null;
 		int result = Statement.EXECUTE_FAILED;
 		try {
@@ -84,10 +72,6 @@ public class Database {
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		if (result == Statement.EXECUTE_FAILED) {
-			return false;
-		}
-		return true;
 	}
 
 	public int getID(String lastName, String firstName) {
