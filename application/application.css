@@ -31,6 +31,41 @@
 	-fx-text-fill: #FFFFFF;
 }
 
+.table-view .scroll-bar:horizontal .track,
+.table-view .scroll-bar:vertical .track {
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-background-radius: 0;
+	-fx-border-radius: 2;
+}
+
+.table-view .scroll-bar:horizontal .increment-button,
+.table-view .scroll-bar:horizontal .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0;
+	-fx-padding: 0 0 10 0;
+}
+
+.table-view .scroll-bar:vertical .increment-button,
+.table-view .scroll-bar:vertical .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0;
+	-fx-padding: 0 0 10 0;
+}
+
+.table-view .scroll-bar .increment-arrow,
+.table-view .scroll-bar .decrement-arrow {
+	-fx-shape: " ";
+	-fx-padding: 0;
+}
+
+.table-view .scroll-bar:horizontal .thumb,
+.table-view .scroll-bar:vertical .thumb {
+	-fx-background-color: #000000;
+	-fx-background-insets: 2 0 0;
+	-fx-background-radius: 2;
+}
+
 .table-row-cell {
 	-fx-background-color: -fx-table-cell-border-color, #616161;
 }
