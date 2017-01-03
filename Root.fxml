@@ -33,7 +33,7 @@
                      <children>
                         <VBox fx:id="leftVBox" alignment="CENTER" layoutX="80.0" layoutY="46.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #262626;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <TableView fx:id="clientTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-font-size: 18 pt; -fx-background-color: #444444;" VBox.vgrow="ALWAYS">
+                              <TableView fx:id="clientTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-font-size: 18 pt; -fx-background-color: #444444; -fx-color: #ffffff;" VBox.vgrow="ALWAYS">
                                 <columns>
                                   <TableColumn fx:id="lastTableColumn" prefWidth="142.0" text="Last" />
                                   <TableColumn fx:id="firstTableColumn" prefWidth="141.0" text="First" />
